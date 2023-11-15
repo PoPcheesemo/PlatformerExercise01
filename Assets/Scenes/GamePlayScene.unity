@@ -38976,8 +38976,8 @@ Transform:
   m_GameObject: {fileID: 522029996}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.45, z: -1.5}
-  m_LocalScale: {x: 1.05, y: 1.2, z: 1}
+  m_LocalPosition: {x: -17.92, y: 8.9, z: -3}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 846804102}
@@ -39064,7 +39064,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 500, y: 12}
+  m_Size: {x: 750, y: 12}
   m_AdaptiveModeThreshold: 1
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -86248,7 +86248,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3.23, z: -1.5}
-  m_LocalScale: {x: 1.05, y: 1.2, z: 1}
+  m_LocalScale: {x: 1.15, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 846804102}
@@ -86299,7 +86299,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 500, y: 12}
+  m_Size: {x: 750, y: 12}
   m_AdaptiveModeThreshold: 1
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -90829,14 +90829,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4627403574045120100, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: m_GravityScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930465077679251058, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: groundDistance
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 6350484095530028054, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -90878,20 +90870,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7272107171682066787, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: JumpTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7272107171682066787, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: _isRunning
-      value: 0
+      propertyPath: JumpMax
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7844170440539897852, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8448211870683763371, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

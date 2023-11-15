@@ -10,9 +10,10 @@ public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
-    public float JumpMax = 4f;
+    public float JumpMax = 10.0f;
     public float JumpPower;
     public float JumpTime = 0f;
+    public float JumpTimeStart;
     public float CurrentMoveSpeed {get
         {
             if (IsMoving)
@@ -57,20 +58,6 @@ public class PlayerController : MonoBehaviour
             animator.SetBool(AnimationStrings.IsRunning, value);
         }
     }
-/*    [SerializeField]
-    private bool _isJumping = false;
-    public bool IsJumping
-    {
-        get
-        {
-            return _isJumping;
-        }
-        private set
-        {
-            _isJumping = value;
-            animator.SetBool(AnimationStrings.IsJumping, value);
-        }
-    }*/
 
     public bool _isFacingRight = true;
     public bool IsFacingRight { get { return _isFacingRight; } private set {
@@ -105,7 +92,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-      //  JumpPower = JumpTime * JumpMax * Time.deltaTime;
         rb.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.velocity.y);
         animator.SetFloat(AnimationStrings.yVelocity, rb.velocity.y);
 
@@ -149,21 +135,19 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        /*if ((float)context.duration < 2.0f && (float)context.duration > 0f)
-        {
-            JumpTime = (float)context.duration;
-        }   
-        else if ((float)context.duration > 2.0f)
-        {
-            JumpTime = 2.0f;
-        }*/
-
         if (context.started)
         {
-            JumpTime = 1.5f;
-            JumpPower = JumpMax * JumpTime;
+            JumpTimeStart = Time.time;
         }
 
-        rb.velocity = new Vector2 (rb.velocityX, JumpPower);
+        if (context.canceled)
+        {
+            animator.SetTrigger(AnimationStrings.Jump);
+            JumpTime = Time.time - JumpTimeStart;
+            if (JumpTime > 0.33f) { JumpTime = 0.33f; }
+
+            JumpPower = JumpMax * JumpTime * 3;
+            rb.velocity = new Vector2(rb.velocityX, JumpPower);
+        }
     }
 }
