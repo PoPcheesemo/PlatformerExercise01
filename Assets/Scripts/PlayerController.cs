@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,10 +14,26 @@ public class PlayerController : MonoBehaviour
     public float JumpPower;
     public float JumpTime = 0f;
     public float JumpTimeStart;
+    Rigidbody2D rb;
+    Animator animator;
+    TouchingDirections touchingDirections;
     public float CurrentMoveSpeed {get
         {
             if (IsMoving)
             {
+                /*if (touchingDirections.IsOnWall && !touchingDirections.IsGrounded) 
+                {
+                    return 0;
+                }*/
+                if (!touchingDirections.IsGrounded)
+                {
+                    runSpeed = 0.66f * 8.0f;
+                    walkSpeed = 0.66f * 5.0f;
+                } else
+                {
+                    runSpeed = 8.0f;
+                    walkSpeed = 5.0f;
+                }
                 if(IsRunning)
                 {
                     return runSpeed;
@@ -69,13 +85,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    Rigidbody2D rb;
-    Animator animator;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        touchingDirections = GetComponent<TouchingDirections>();
     }
 
     // Start is called before the first frame update
@@ -97,9 +112,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void OnAttack()
+    public void OnAttack(InputAction.CallbackContext context)
     {
-
+        if (context.started)
+        {
+            animator.SetTrigger(AnimationStrings.Attack);
+        }
     }
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -135,12 +153,12 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && touchingDirections.IsGrounded)
         {
             JumpTimeStart = Time.time;
         }
 
-        if (context.canceled)
+        if (context.canceled && touchingDirections.IsGrounded)
         {
             animator.SetTrigger(AnimationStrings.Jump);
             JumpTime = Time.time - JumpTimeStart;
