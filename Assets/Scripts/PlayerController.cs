@@ -14,23 +14,33 @@ public class PlayerController : MonoBehaviour
     public float JumpPower;
     public float JumpTime = 0f;
     public float JumpTimeStart;
+
+    public bool CanMove {  get
+        {
+            return animator.GetBool(AnimationStrings.canMove);
+        } set
+        {
+            CanMove = animator.GetBool(AnimationStrings.canMove);
+        }
+    }
+
     Rigidbody2D rb;
     Animator animator;
     TouchingDirections touchingDirections;
     public float CurrentMoveSpeed {get
         {
-            if (IsMoving)
+            if (CanMove)
             {
-                /*if (touchingDirections.IsOnWall && !touchingDirections.IsGrounded) 
-                {
-                    return 0;
-                }*/
-                if (!touchingDirections.IsGrounded)
-                {
-                    runSpeed = 0.66f * 8.0f;
-                    walkSpeed = 0.66f * 5.0f;
-                } else
-                {
+                 if (IsMoving)
+                 {
+                
+                    if (!touchingDirections.IsGrounded)
+                    {
+                        runSpeed = 0.66f * 8.0f;
+                        walkSpeed = 0.66f * 5.0f;
+                    }
+                    else
+                    {
                     runSpeed = 8.0f;
                     walkSpeed = 5.0f;
                 }
@@ -45,6 +55,9 @@ public class PlayerController : MonoBehaviour
                 {
                     return 0;
                 }
+            }
+            else { return 0; }
+           
         }
     }
 
@@ -153,7 +166,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started && touchingDirections.IsGrounded)
+        if (context.started && touchingDirections.IsGrounded && CanMove)
         {
             JumpTimeStart = Time.time;
         }

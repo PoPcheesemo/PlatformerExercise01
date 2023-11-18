@@ -10,5 +10,10 @@ internal class AnimationStrings
     internal static String yVelocity = "yVelocity";
     internal static String Jump = "Jump";
     internal static String Attack = "Attack";
+    internal static String canMove = "canMove";
+    internal static String rbVelocity = "rbVelocity";
+    internal static String Death = "Death";
+    internal static String Hurt = "Hurt";
+    internal static String HasTarget = "HasTarget";
 
 }
