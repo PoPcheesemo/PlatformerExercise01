@@ -32460,17 +32460,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &429275796 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3154703906597629220, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
-  m_PrefabInstance: {fileID: 7467510487282011440}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72f7a880293b44540b53662213f49c23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &435801734
 GameObject:
   m_ObjectHideFlags: 0
@@ -91174,13 +91163,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: KnightEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4548951952997547677, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 6877708869569698389, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 6877708869569698389, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -91218,14 +91203,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8223987546642960345, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
-      propertyPath: walkSpeed
-      value: 1.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 8223987546642960345, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
-      propertyPath: attackZone
-      value: 
-      objectReference: {fileID: 429275796}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

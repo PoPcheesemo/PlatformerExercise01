@@ -218,11 +218,13 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  walkSpeed: 3
+  moveSpeed: 0
+  walkSpeed: 1.75
+  runSpeed: 5
   rayLength: 1
   attackZone: {fileID: 3154703906597629220}
+  _isFacingRight: 0
   _isGrounded: 1
-  _isFacingRight: 1
   _isOnWall: 0
   _hasTarget: 0
 --- !u!58 &3765456992161104007
@@ -294,7 +296,7 @@ GameObject:
   - component: {fileID: 4689635457191835014}
   - component: {fileID: 6894352678054133405}
   - component: {fileID: 3154703906597629220}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: DetectionZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,4 +376,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f7a880293b44540b53662213f49c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 8223987546642960345}
   detectedColliders: []

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DetectionZone : MonoBehaviour
 {
+    public Knight parent;
+
     public List<Collider2D> detectedColliders = new List<Collider2D>();
     Collider2D col;
 
@@ -11,6 +13,7 @@ public class DetectionZone : MonoBehaviour
     private void Awake()
     {
         col = GetComponent<Collider2D>();
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -20,5 +23,11 @@ public class DetectionZone : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         detectedColliders.Remove(collision);
+        parent.StartCoroutine(parent.KnightAggro());
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        parent.IsAggro = true;
+        
     }
 }
