@@ -218,6 +218,7 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  countdownTime: 4
   moveSpeed: 0
   walkSpeed: 1.75
   runSpeed: 5

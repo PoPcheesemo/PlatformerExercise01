@@ -7,15 +7,6 @@ public class DetectionZone : MonoBehaviour
     public Knight parent;
 
     public List<Collider2D> detectedColliders = new List<Collider2D>();
-    Collider2D col;
-
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        col = GetComponent<Collider2D>();
-
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         detectedColliders.Add(collision);

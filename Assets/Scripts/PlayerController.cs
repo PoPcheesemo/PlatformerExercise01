@@ -8,8 +8,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float walkSpeed = 5f;
-    public float runSpeed = 8f;
+    private float walkSpeed;
+    private float runSpeed;
+    public float walkSpeedSet;
+    public float runSpeedSet;
     public float JumpMax = 10.0f;
     public float JumpPower;
     public float JumpTime = 0f;
@@ -27,6 +29,10 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     TouchingDirections touchingDirections;
+    SpriteRenderer spriteRenderer;
+    PlayerInput playerInput;
+
+    public Sprite deathSprite;
     public float CurrentMoveSpeed {get
         {
             if (CanMove)
@@ -36,13 +42,13 @@ public class PlayerController : MonoBehaviour
                 
                     if (!touchingDirections.IsGrounded)
                     {
-                        runSpeed = 0.66f * 8.0f;
-                        walkSpeed = 0.66f * 5.0f;
+                        runSpeed = 0.66f * runSpeedSet;
+                        walkSpeed = 0.66f * walkSpeedSet;
                     }
                     else
                     {
-                    runSpeed = 8.0f;
-                    walkSpeed = 5.0f;
+                    runSpeed = runSpeedSet;
+                    walkSpeed = walkSpeedSet;
                 }
                 if(IsRunning)
                 {
@@ -89,6 +95,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool _isFacingRight = true;
+
     public bool IsFacingRight { get { return _isFacingRight; } private set {
             if (_isFacingRight != value)
             {
@@ -104,6 +111,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        playerInput = GetComponent<PlayerInput>();
     }
     private void FixedUpdate()
     {
@@ -167,5 +176,21 @@ public class PlayerController : MonoBehaviour
             JumpPower = JumpMax * JumpTime * 3;
             rb.velocity = new Vector2(rb.velocityX, JumpPower);
         }
+    }
+    public void OnDeath()
+    {
+        animator.SetTrigger(AnimationStrings.Death);
+        StartCoroutine(DeathCooldown());
+        
+    }
+    IEnumerator DeathCooldown()
+    {
+        playerInput.DeactivateInput();
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.sprite = deathSprite;
+        yield return new WaitUntil(() => !animator.GetCurrentAnimatorStateInfo(0).IsTag(AnimationStrings.Death));
+        animator.enabled = false;
+        spriteRenderer.sprite = deathSprite;
+        Debug.Log("DEATH!");
     }
 }

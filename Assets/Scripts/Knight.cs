@@ -48,7 +48,6 @@ public class Knight : MonoBehaviour
     }
     public IEnumerator KnightAggro()
     {
-        countdownTime = 5;
         Debug.Log("AGGRO!");
         if (!IsFacingRight)
         {
