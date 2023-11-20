@@ -15,10 +15,12 @@ public class DetectionZone : MonoBehaviour
     {
         detectedColliders.Remove(collision);
         parent.StartCoroutine(parent.KnightAggro());
+        parent.animator.SetBool(AnimationStrings.canMove, true);
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         parent.IsAggro = true;
-        
+        parent.animator.SetBool(AnimationStrings.canMove, false);
+
     }
 }

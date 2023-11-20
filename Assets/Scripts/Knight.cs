@@ -1,6 +1,7 @@
 using NUnit.Framework.Internal;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -9,8 +10,15 @@ public class Knight : MonoBehaviour
     public ContactFilter2D castFilterGround;
 
     public int countdownTime;
+    public float moveSlowRate;
+    public float moveFastRate;
+    public float moveSpeed;
+    public float walkSpeed = 1.75f;
+    public float runSpeed = 5f;
+    public float rayLength = 3.4f;
+    public float attackRate = 10f;
 
-    private bool _isAggro;
+    [SerializeField] private bool _isAggro;
     public bool IsAggro { get { return _isAggro; }
         set
         {
@@ -39,11 +47,11 @@ public class Knight : MonoBehaviour
         yield return new WaitForSeconds(1f);
         if (!IsFacingRight)
         {
-            moveSpeed = -walkSpeed;
+            moveSpeed = Mathf.Lerp(0f, -walkSpeed, moveFastRate);
         }
         else
         {
-            moveSpeed = walkSpeed;
+            moveSpeed = Mathf.Lerp(0f, walkSpeed, moveFastRate);
         }
     }
     public IEnumerator KnightAggro()
@@ -51,35 +59,31 @@ public class Knight : MonoBehaviour
         Debug.Log("AGGRO!");
         if (!IsFacingRight)
         {
-            moveSpeed = -runSpeed;
+            moveSpeed = Mathf.Lerp(0f, -runSpeed, moveFastRate);
         }
         else
         {
-        moveSpeed = runSpeed;
+            moveSpeed = Mathf.Lerp(0f, runSpeed, moveFastRate);
         }
-         for (int i = countdownTime * 20; i > 0; i--)
+         for (int i = countdownTime * 5; i > 0; i--)
         {
-            yield return new WaitForSeconds(1f / 20f);
-            Debug.Log("COUNTDOWN: " + ((float)i / 20));
+            yield return new WaitForSeconds(1f / 5);
+            Debug.Log("COUNTDOWN: " + ((float)i / 5));
             IsAggro = true;
         }
 
         if (!IsFacingRight)
         {
-            moveSpeed = -walkSpeed;
+            moveSpeed = Mathf.Lerp(moveSpeed, -walkSpeed, moveSlowRate);
         }
         else
         {
-            moveSpeed = walkSpeed;
+            moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, moveSlowRate);
         }
         Debug.Log("AGGRO OVER!!!");
         IsAggro = false;
     }
 
-    public float moveSpeed;
-    public float walkSpeed = 1.75f;
-    public float runSpeed = 5f;
-    public float rayLength = 3.4f;
 
     CapsuleCollider2D capsuleCollider;
     CircleCollider2D circleCollider;
@@ -87,7 +91,7 @@ public class Knight : MonoBehaviour
     public DetectionZone attackZone;
 
     Rigidbody2D rb;
-    Animator animator;
+    public Animator animator;
 
     RaycastHit2D[] groundHits = new RaycastHit2D[1];
     RaycastHit2D[] wallHits = new RaycastHit2D[4];
@@ -108,7 +112,6 @@ public class Knight : MonoBehaviour
                 _isFacingRight = false;
             }
         }
-
     }
     [SerializeField] private bool _isGrounded = true;
     public bool IsGrounded
@@ -121,7 +124,6 @@ public class Knight : MonoBehaviour
         {
             _isGrounded = value;
             animator.SetBool(AnimationStrings.IsGrounded, value);
-
         }
     }
     [SerializeField] private bool _isOnWall;
@@ -131,9 +133,10 @@ public class Knight : MonoBehaviour
         {
             _hasTarget = value;
             animator.SetBool(AnimationStrings.HasTarget, value);
-            
         }
     }
+    public bool CanMove { get { return animator.GetBool(AnimationStrings.canMove); } }
+    public bool IsAttacking { get { return animator.GetBool(AnimationStrings.IsAttacking); } }
     public bool IsOnWall
     {
         get
@@ -153,21 +156,34 @@ public class Knight : MonoBehaviour
         capsuleCollider = rb.GetComponent<CapsuleCollider2D>();
         circleCollider = rb.GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
+        rb.velocity = new Vector2(moveSpeed * Vector2.right.x, rb.velocity.y);
     }
     void Update()
     {
         HasTarget = attackZone.detectedColliders.Count > 0;
         animator.SetFloat(AnimationStrings.rbVelocity, Mathf.Abs(rb.velocityX));
-    }
-
-    private void FixedUpdate()
-    {
-        rb.velocity = new Vector2(moveSpeed * Vector2.right.x, rb.velocity.y);
-
-        IsGrounded = circleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.3f) > 0;
+        IsGrounded = circleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) > 0;
 
         IsOnWall = circleCollider.Cast(new Vector2(1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0 ||
             circleCollider.Cast(new Vector2(-1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0;
+
+        
+        
+    }
+    private void FixedUpdate()
+    {
+        if (CanMove && !IsAttacking)
+        {
+             StartCoroutine(WalkCooldown());
+        }
+        else
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+        }
+        if (HasTarget && !IsAttacking)
+        {
+            StartCoroutine(AttackCooldown(attackRate));
+        }
         if (IsAggro == true)
         {
             if (!IsFacingRight)
@@ -178,11 +194,18 @@ public class Knight : MonoBehaviour
             {
                 moveSpeed = runSpeed;
             }
-        }
-        if (HasTarget)
+        } else
         {
-            animator.SetTrigger(AnimationStrings.Attack);
+            if (!IsFacingRight)
+            {
+                moveSpeed = Mathf.Lerp(0f, -walkSpeed, moveFastRate);
+            }
+            else
+            {
+                moveSpeed = Mathf.Lerp(0f, walkSpeed, moveFastRate);
+            }
         }
+        
         if (_isOnWall)
         {
             Flip();
@@ -192,6 +215,25 @@ public class Knight : MonoBehaviour
             }
         }
         SetFacingDirection();
+    }
+    IEnumerator WalkCooldown()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        rb.velocity = new Vector2(moveSpeed * Vector2.right.x, rb.velocity.y);
+    }
+    IEnumerator AttackCooldown(float attackRate)
+    {
+        Debug.LogWarning("! ! ! ATTACK STARTED ! ! !");
+        animator.SetBool(AnimationStrings.IsAttacking, true);
+        animator.SetBool(AnimationStrings.canMove, false);
+        yield return new WaitForSeconds(0.2f);
+
+      attackRate = 20 / attackRate;
+        animator.SetTrigger(AnimationStrings.Attack);
+        yield return new WaitForSeconds(0.1f + attackRate);
+        Debug.LogWarning("! ! ! ATTACK ENDED ! ! !");
+        animator.SetBool(AnimationStrings.IsAttacking, false);
     }
     private void Flip()
     {

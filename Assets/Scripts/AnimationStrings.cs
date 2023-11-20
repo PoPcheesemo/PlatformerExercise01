@@ -15,5 +15,6 @@ internal class AnimationStrings
     internal static String Death = "Death";
     internal static String Hurt = "Hurt";
     internal static String HasTarget = "HasTarget";
+    internal static String IsAttacking = "IsAttacking";
 
 }
