@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(IDamageable))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float JumpPower;
     public float JumpTime = 0f;
     public float JumpTimeStart;
+    private static int deathCounter = 0;
 
     public bool CanMove {  get
         {
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     TouchingDirections touchingDirections;
     SpriteRenderer spriteRenderer;
     PlayerInput playerInput;
+    IDamageable damageable;
 
     public Sprite deathSprite;
     public float CurrentMoveSpeed {get
@@ -113,6 +115,19 @@ public class PlayerController : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
+        damageable = GetComponent<IDamageable>();
+    }
+    void Update()
+    {
+        if (!damageable.IsAlive)
+        {
+            while (deathCounter == 0)
+            {
+                deathCounter++;
+                OnDeath();
+                Debug.Log("DEATH FOR PLAYER!!!");
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -136,7 +151,6 @@ public class PlayerController : MonoBehaviour
 
         SetFacingDirection(moveInput);
     }
-
     private void SetFacingDirection(Vector2 moveInput)
     {
         if (moveInput.x > 0 && !IsFacingRight)
@@ -147,7 +161,6 @@ public class PlayerController : MonoBehaviour
             IsFacingRight = false;
         }
     }
-
     public void OnRun(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -171,17 +184,15 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger(AnimationStrings.Jump);
             JumpTime = Time.time - JumpTimeStart;
-            if (JumpTime > 0.33f) { JumpTime = 0.33f; }
+            if (JumpTime > 0.167f) JumpTime = 0.167f;
 
-            JumpPower = JumpMax * JumpTime * 3;
+            JumpPower = JumpMax * JumpTime * 6;
             rb.velocity = new Vector2(rb.velocityX, JumpPower);
         }
     }
     public void OnDeath()
     {
-        animator.SetTrigger(AnimationStrings.Death);
         StartCoroutine(DeathCooldown());
-        
     }
     IEnumerator DeathCooldown()
     {

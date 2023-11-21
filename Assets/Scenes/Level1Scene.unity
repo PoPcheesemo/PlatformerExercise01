@@ -92156,10 +92156,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7272107171682066787, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: JumpMax
-      value: 25
-      objectReference: {fileID: 0}
     - target: {fileID: 7844170440539897852, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
       propertyPath: m_Name
       value: Player
@@ -92236,11 +92232,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 824357537565433501, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8
+      value: -13
       objectReference: {fileID: 0}
     - target: {fileID: 824357537565433501, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 824357537565433501, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -92277,10 +92273,6 @@ PrefabInstance:
     - target: {fileID: 1035743346835920588, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
       propertyPath: m_Name
       value: DeathZone
-      objectReference: {fileID: 0}
-    - target: {fileID: 2898756723875068023, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

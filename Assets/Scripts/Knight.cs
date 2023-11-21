@@ -18,6 +18,13 @@ public class Knight : MonoBehaviour
     public float rayLength = 3.4f;
     public float attackRate = 10f;
 
+    CapsuleCollider2D capsuleCollider;
+    CircleCollider2D circleCollider;
+    IDamageable damageable;
+    Rigidbody2D rb;
+    public DetectionZone attackZone;
+    public Animator animator;
+
     [SerializeField] private bool _isAggro;
     public bool IsAggro { get { return _isAggro; }
         set
@@ -26,7 +33,7 @@ public class Knight : MonoBehaviour
         }
     }
 
-    public enum EnemyDirection { Left, Right}
+    public enum EnemyDirection {Left, Right}
     private EnemyDirection _walkDirection;
     public EnemyDirection WalkDirection
     {
@@ -85,13 +92,6 @@ public class Knight : MonoBehaviour
     }
 
 
-    CapsuleCollider2D capsuleCollider;
-    CircleCollider2D circleCollider;
-
-    public DetectionZone attackZone;
-
-    Rigidbody2D rb;
-    public Animator animator;
 
     RaycastHit2D[] groundHits = new RaycastHit2D[1];
     RaycastHit2D[] wallHits = new RaycastHit2D[4];
@@ -128,6 +128,7 @@ public class Knight : MonoBehaviour
     }
     [SerializeField] private bool _isOnWall;
     public bool _hasTarget = false;
+
     public bool HasTarget { get {  return _hasTarget; }
     private set
         {
@@ -157,6 +158,7 @@ public class Knight : MonoBehaviour
         circleCollider = rb.GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
         rb.velocity = new Vector2(moveSpeed * Vector2.right.x, rb.velocity.y);
+        damageable = GetComponent<IDamageable>();
     }
     void Update()
     {
@@ -167,7 +169,15 @@ public class Knight : MonoBehaviour
         IsOnWall = circleCollider.Cast(new Vector2(1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0 ||
             circleCollider.Cast(new Vector2(-1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0;
 
+        /*if(damageable.IsAlive == false)
+        {
+            animator.SetTrigger(AnimationStrings.Death);
+        }*/
         
+    }
+    private void Death()
+    {
+        animator.SetTrigger(AnimationStrings.Death);
         
     }
     private void FixedUpdate()

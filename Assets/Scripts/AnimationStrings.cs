@@ -16,5 +16,7 @@ internal class AnimationStrings
     internal static String Hurt = "Hurt";
     internal static String HasTarget = "HasTarget";
     internal static String IsAttacking = "IsAttacking";
+    internal static String IsAlive = "IsAlive";
+    internal static String IsInvincible = "IsInvincible";
 
 }
