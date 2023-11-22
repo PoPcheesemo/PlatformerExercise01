@@ -216,7 +216,7 @@ public class Knight : MonoBehaviour
             }
         }
         
-        if (_isOnWall)
+        if (_isOnWall || !IsGrounded)
         {
             Flip();
             if (!IsAggro)

@@ -7,6 +7,9 @@ public class IDamageable : MonoBehaviour
     private int deathCounter = 0;
     Animator animator;
 
+    [SerializeField] private float hurtTime = 0f;
+    [SerializeField] private float iTime = 0.2f;
+
     [SerializeField] private int _maxHP = 100;
     public int MaxHP { get 
         { 
@@ -71,6 +74,17 @@ public class IDamageable : MonoBehaviour
     }
     private void Update()
     {
+        if (IsInvincible)
+        {
+            if (hurtTime > iTime)
+            {
+                //Remove invincibility
+                IsInvincible = false;
+                hurtTime = 0;
+            }
+
+            hurtTime += Time.deltaTime;
+        }
         if (!IsAlive)
         {
             while (deathCounter == 0)
@@ -80,6 +94,7 @@ public class IDamageable : MonoBehaviour
                 animator.SetTrigger(AnimationStrings.Death);
             }
         }
+        
     }
 
     public void Hit(int damage)
@@ -90,6 +105,7 @@ public class IDamageable : MonoBehaviour
             CurrentHP -= damage;
             Debug.LogError("OUCH");
             animator.SetTrigger(AnimationStrings.Hurt);
+            IsInvincible = true;
         }  
     }
 }

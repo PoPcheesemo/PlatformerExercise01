@@ -10,7 +10,7 @@ public class DeathZone : MonoBehaviour
     {
         player = GetComponent<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.enabled = false;
+      //  spriteRenderer.enabled = false;
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -24,8 +24,13 @@ public class DeathZone : MonoBehaviour
             player.OnDeath();
         }*/
         Debug.Log("COLLIDER: " + collision.name);
-            collision.GetComponent<IDamageable>().IsAlive = false;
+     //    collision.GetComponent<IDamageable>().IsAlive = false;
 
       //  }
+        collision.GetComponent<IDamageable>().Hit(20);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
     }
 }

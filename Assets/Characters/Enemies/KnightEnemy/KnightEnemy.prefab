@@ -205,9 +205,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 453932b1fb59c47408c7e8f4e560c72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hurtTime: 0
+  iTime: 0.4
   _maxHP: 100
   _currentHP: 100
+  _damage: 10
   _isAlive: 1
+  _isInvincible: 0
 --- !u!114 &8223987546642960345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,9 +246,9 @@ MonoBehaviour:
   runSpeed: 5
   rayLength: 1
   attackRate: 15
-  _isAggro: 0
   attackZone: {fileID: 3154703906597629220}
   animator: {fileID: 0}
+  _isAggro: 0
   _isFacingRight: 0
   _isGrounded: 1
   _isOnWall: 0
@@ -275,15 +279,15 @@ CircleCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1024
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.51, y: -1.26}
+  m_Offset: {x: 1.51, y: -1.2}
   m_Radius: 0.2
 --- !u!95 &7510577680887738614
 Animator:

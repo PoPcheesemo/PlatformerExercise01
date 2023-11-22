@@ -126,6 +126,7 @@ public class PlayerController : MonoBehaviour
                 deathCounter++;
                 OnDeath();
                 Debug.Log("DEATH FOR PLAYER!!!");
+                playerInput.enabled = false;
             }
         }
     }
