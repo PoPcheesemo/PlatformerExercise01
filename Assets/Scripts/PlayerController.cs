@@ -18,20 +18,11 @@ public class PlayerController : MonoBehaviour
     public float JumpTimeStart;
     private static int deathCounter = 0;
 
-    public bool CanMove {  get
-        {
-            return animator.GetBool(AnimationStrings.canMove);
-        } set
-        {
-            CanMove = animator.GetBool(AnimationStrings.canMove);
-        }
-    }
-
     Rigidbody2D rb;
     Animator animator;
     TouchingDirections touchingDirections;
     SpriteRenderer spriteRenderer;
-    PlayerInput playerInput;
+    public PlayerInput playerInput;
     IDamageable damageable;
 
     public Sprite deathSprite;
@@ -70,6 +61,18 @@ public class PlayerController : MonoBehaviour
     }
 
     Vector2 moveInput;
+
+    public bool CanMove
+    {
+        get
+        {
+            return animator.GetBool(AnimationStrings.canMove);
+        }
+        set
+        {
+            CanMove = animator.GetBool(AnimationStrings.canMove);
+        }
+    }
     [SerializeField]
     private bool _isMoving = false;
     public bool IsMoving { get
@@ -134,7 +137,6 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.velocity.y);
         animator.SetFloat(AnimationStrings.yVelocity, rb.velocity.y);
-
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -171,7 +173,6 @@ public class PlayerController : MonoBehaviour
         if (context.canceled)
         {
             IsRunning = false;
-
         }
     }
     public void OnJump(InputAction.CallbackContext context)
@@ -201,8 +202,14 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.sprite = deathSprite;
         yield return new WaitUntil(() => !animator.GetCurrentAnimatorStateInfo(0).IsTag(AnimationStrings.Death));
-        animator.enabled = false;
+     //   animator.enabled = false;
         spriteRenderer.sprite = deathSprite;
         Debug.Log("DEATH!");
+    }
+    public void OnHit(int damage, Vector2 knockback)
+    {
+
+        rb.velocity = new Vector2(knockback.x, knockback.y); // +rb.velocity.y
+
     }
 }

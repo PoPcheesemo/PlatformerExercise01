@@ -38908,7 +38908,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0000005364418, y: -1.9, z: -10}
+  m_LocalPosition: {x: 0.00000047683716, y: -1.9, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -81597,7 +81597,7 @@ Transform:
   m_GameObject: {fileID: 743649682}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0000005364418, y: -1.9, z: -10}
+  m_LocalPosition: {x: 0.00000047683716, y: -1.9, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -91356,9 +91356,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4755097505816824733, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
-      propertyPath: iTime
-      value: 0.4
+    - target: {fileID: 3578976313695986380, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
+      propertyPath: damage
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3578976313695986380, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
+      propertyPath: knockback.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3578976313695986380, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
+      propertyPath: knockback.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6350484095530028054, guid: 6e9f66a792fa45345b26e210a141920e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -91421,6 +91429,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: KnightEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6020040097164260949, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
+      propertyPath: knockback.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6020040097164260949, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
+      propertyPath: knockback.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6877708869569698389, guid: b05726364cf4784498b79b89c47b20bd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10
@@ -91480,7 +91496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 824357537565433501, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2
+      value: 2.49
       objectReference: {fileID: 0}
     - target: {fileID: 824357537565433501, guid: 308b517ad7ffe5a49a5ce3105d5a85d7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -91541,6 +91557,6 @@ SceneRoots:
   - {fileID: 846804102}
   - {fileID: 743649685}
   - {fileID: 828767663}
+  - {fileID: 2026744276}
   - {fileID: 2421811113527079232}
   - {fileID: 7467510487282011440}
-  - {fileID: 2026744276}

@@ -13,10 +13,10 @@ public class Knight : MonoBehaviour
     public float moveSlowRate;
     public float moveFastRate;
     public float moveSpeed;
-    public float walkSpeed = 1.75f;
-    public float runSpeed = 5f;
-    public float rayLength = 3.4f;
-    public float attackRate = 10f;
+    public float walkSpeed;
+    public float runSpeed;
+    public float rayLength;
+    public float attackRate;
 
     CapsuleCollider2D capsuleCollider;
     CircleCollider2D circleCollider;
@@ -126,7 +126,8 @@ public class Knight : MonoBehaviour
             animator.SetBool(AnimationStrings.IsGrounded, value);
         }
     }
-    [SerializeField] private bool _isOnWall;
+
+
     public bool _hasTarget = false;
 
     public bool HasTarget { get {  return _hasTarget; }
@@ -136,8 +137,23 @@ public class Knight : MonoBehaviour
             animator.SetBool(AnimationStrings.HasTarget, value);
         }
     }
-    public bool CanMove { get { return animator.GetBool(AnimationStrings.canMove); } }
+    private bool _canMove;
+    public bool CanMove { get { return animator.GetBool(AnimationStrings.canMove); }
+        set 
+        {
+            _canMove = value;
+        }
+    }
     public bool IsAttacking { get { return animator.GetBool(AnimationStrings.IsAttacking); } }
+    [SerializeField] private bool _isEdge;
+    public bool IsEdge { get { return _isEdge; }
+        private set 
+        {
+            _isEdge = value;
+        }
+    }
+    [SerializeField] private bool _isOnWall;
+
     public bool IsOnWall
     {
         get
@@ -148,6 +164,19 @@ public class Knight : MonoBehaviour
         {
             _isOnWall = value;
             animator.SetBool(AnimationStrings.IsOnWall, value);
+        }
+    }
+    [SerializeField] private bool _isHurt;
+
+    public bool IsHurt
+    {
+        get
+        {
+            return _isHurt;
+        }
+        private set
+        {
+            _isHurt = value;
         }
     }
 
@@ -162,9 +191,15 @@ public class Knight : MonoBehaviour
     }
     void Update()
     {
+        if (IsHurt) 
+        {
+            
+            rb.velocity = new Vector2(damageable.knockback.x, damageable.knockback.y);
+        }
         HasTarget = attackZone.detectedColliders.Count > 0;
         animator.SetFloat(AnimationStrings.rbVelocity, Mathf.Abs(rb.velocityX));
-        IsGrounded = circleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) > 0;
+        IsGrounded = capsuleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) > 0;
+        IsEdge = circleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) <= 0;
 
         IsOnWall = circleCollider.Cast(new Vector2(1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0 ||
             circleCollider.Cast(new Vector2(-1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0;
@@ -216,7 +251,7 @@ public class Knight : MonoBehaviour
             }
         }
         
-        if (_isOnWall || !IsGrounded)
+        if (IsOnWall || (IsEdge && IsGrounded))
         {
             Flip();
             if (!IsAggro)
@@ -239,7 +274,7 @@ public class Knight : MonoBehaviour
         animator.SetBool(AnimationStrings.canMove, false);
         yield return new WaitForSeconds(0.2f);
 
-      attackRate = 20 / attackRate;
+        attackRate = 20 / attackRate;
         animator.SetTrigger(AnimationStrings.Attack);
         yield return new WaitForSeconds(0.1f + attackRate);
         Debug.LogWarning("! ! ! ATTACK ENDED ! ! !");
@@ -260,5 +295,20 @@ public class Knight : MonoBehaviour
         {
             IsFacingRight = false;
         }
+    }
+    public void OnHit(int damage, Vector2 knockback)
+    {
+        IsHurt = true;
+        StartCoroutine(KnockbackDelay(knockback));
+
+    }
+    IEnumerator KnockbackDelay(Vector2 knockback)
+    {
+        Debug.LogError("KNOCKBACK STARTED: " + Time.time);
+        moveSpeed = 0;
+      //  rb.AddForce(knockback);
+        yield return new WaitForSeconds(0.5f);
+        Debug.LogError("KNOCKBACK ENDED: " + Time.time);
+        IsHurt = false;
     }
 }

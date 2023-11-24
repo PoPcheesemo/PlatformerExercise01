@@ -27,7 +27,7 @@ public class DeathZone : MonoBehaviour
      //    collision.GetComponent<IDamageable>().IsAlive = false;
 
       //  }
-        collision.GetComponent<IDamageable>().Hit(20);
+        collision.GetComponent<IDamageable>().Hit(20, Vector2.zero);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
