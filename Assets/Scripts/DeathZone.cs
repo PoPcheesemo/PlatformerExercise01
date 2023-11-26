@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeathZone : MonoBehaviour
 {
+    public Vector2 knockback;
+    public float faceRight;
     PlayerController player;
     SpriteRenderer spriteRenderer;
     private void Awake()
@@ -14,23 +16,6 @@ public class DeathZone : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //  if (collision.tag == "Player")
-        //  {
-        /*player = collision.transform.GetComponent<PlayerController>();
-
-        if (player != null)
-        {
-            player.GetComponent<PolygonCollider2D>().enabled = false;
-            player.OnDeath();
-        }*/
-        Debug.Log("COLLIDER: " + collision.name);
-     //    collision.GetComponent<IDamageable>().IsAlive = false;
-
-      //  }
-        collision.GetComponent<IDamageable>().Hit(20, Vector2.zero);
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
+        collision.GetComponent<IDamageable>().Hit(20, knockback, faceRight);
     }
 }

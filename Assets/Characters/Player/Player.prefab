@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2370751848703724039}
   m_Layer: 8
   m_Name: AttackBox
-  m_TagString: Untagged
+  m_TagString: AttackBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021f20e950f6651418da21f8946ad110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
-  knockback: {x: -30, y: 5}
+  damage: 5
+  knockback: {x: 4000, y: 500}
+  faceRight: 0
 --- !u!60 &2370751848703724039
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -73,7 +74,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -205,7 +206,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 1.5
   m_Material: {fileID: 0}
@@ -249,11 +250,15 @@ MonoBehaviour:
   hurtTime: 0
   iTime: 0.4
   _maxHP: 100
-  knockback: {x: 5, y: 5}
+  knockback: {x: 0, y: 0}
+  faceRight: 0
   _currentHP: 100
   _damage: 10
   _isAlive: 1
   _isInvincible: 0
+  _isBlocking: 0
+  blockDamMod: 75
+  blockKnockMod: {x: 0.6, y: 0.8}
 --- !u!114 &7272107171682066787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,11 +273,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeedSet: 5
   runSpeedSet: 8
-  JumpMax: 15
+  JumpMax: 50
   JumpPower: 0
   JumpTime: 0
   JumpTimeStart: 0
-  playerInput: {fileID: 0}
+  playerInput: {fileID: 655045827232394284}
   deathSprite: {fileID: 21300000, guid: 941f12cc3f51e40478aac6473c2e282b, type: 3}
   _isMoving: 0
   _isRunning: 0
@@ -410,6 +415,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0f9d03e9-b539-4616-a518-60fbc8d221c9
     m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7272107171682066787}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnBlock
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0b006259-cda9-4c02-a32b-b029ae406f14
+    m_ActionName: 'Player/Block[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

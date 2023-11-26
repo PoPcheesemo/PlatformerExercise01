@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+
         if (!damageable.IsAlive)
         {
             while (deathCounter == 0)
@@ -135,7 +136,21 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (!damageable.IsBlocking)
+        {
         rb.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.velocity.y);
+
+        }
+        if(rb.velocity.y >= 0)
+        {
+            rb.gravityScale = 2.5f;
+            rb.drag = 10f;
+        }
+        else 
+        { 
+            rb.gravityScale = 10f;
+            rb.drag = 2f;
+        }
         animator.SetFloat(AnimationStrings.yVelocity, rb.velocity.y);
     }
 
@@ -206,10 +221,28 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.sprite = deathSprite;
         Debug.Log("DEATH!");
     }
-    public void OnHit(int damage, Vector2 knockback)
+    public void OnHit(int damage, Vector2 knockback, float faceRight)
     {
+        rb.AddForce(knockback);
+    //    rb.velocity = new Vector2(knockback.x, knockback.y); // +rb.velocity.y
 
-        rb.velocity = new Vector2(knockback.x, knockback.y); // +rb.velocity.y
+    }
+    public void OnBlock(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            damageable.IsBlocking = true;
+            animator.SetBool(AnimationStrings.IsBlocking, true);
+            runSpeed = 0f;
+            walkSpeed = 0f;
 
+        }
+        if (context.canceled)
+        {
+            damageable.IsBlocking = false;
+            animator.SetBool(AnimationStrings.IsBlocking, false);
+            runSpeed = runSpeedSet;
+            walkSpeed = walkSpeedSet;
+        }
     }
 }

@@ -11,7 +11,7 @@ public class IDamageable : MonoBehaviour
     Animator animator;
     PlayerInput playerInput;
 
-    public UnityEvent<int, Vector2> damageableHit;
+    public UnityEvent<int, Vector2, float> damageableHit;
 
     [SerializeField] private float hurtTime = 0f;
     [SerializeField] private float iTime = 0.2f;
@@ -19,6 +19,7 @@ public class IDamageable : MonoBehaviour
     [SerializeField] private int _maxHP = 100;
 
     public Vector2 knockback;
+    public float faceRight;
     public int MaxHP { get 
         { 
             return _maxHP; 
@@ -65,7 +66,6 @@ public class IDamageable : MonoBehaviour
         }
     }
     [SerializeField] private bool _isInvincible;
-
     public bool IsInvincible { get 
         {
         return _isInvincible;
@@ -75,15 +75,27 @@ public class IDamageable : MonoBehaviour
             _isInvincible = value;
         }
     }
+    [SerializeField] private bool _isBlocking;
+    public float blockDamMod;
+    public Vector2 blockKnockMod;
+
+    public bool IsBlocking { get
+        {
+            return _isBlocking;
+        } set
+        {
+            _isBlocking = value;
+        }
+    }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
-     //   knockback = GetComponentInParent<Knight>().GetComponent<Attack>().knockback;
     }
     private void Update()
     {
+        faceRight = transform.localScale.x;
         if (IsInvincible)
         {
             if (hurtTime > iTime)
@@ -100,6 +112,7 @@ public class IDamageable : MonoBehaviour
 
             hurtTime += Time.deltaTime;
         }
+        
         if (!IsAlive)
         {
             while (deathCounter == 0)
@@ -111,31 +124,33 @@ public class IDamageable : MonoBehaviour
             }
             if (GetComponentInParent<PlayerController>() == true )
             {
-                    Debug.LogWarning("PLAYER IS DEAD");
                     GetComponentInParent<PlayerController>().playerInput.enabled = false;
             }
             if(GetComponentInParent<Knight>() == true )
                 {
-                    Debug.LogWarning("KNIGHT IS DEAD");
-                    GetComponentInParent<Knight>().moveSpeed = 0;
+                    GetComponentInParent<Knight>().enabled = false;
                 }
         }
     }
-    public void Hit(int damage, Vector2 knockback)
+    public void Hit(int damage, Vector2 knockback, float faceRight)
     {
         if (IsInvincible) { return; }
         if (IsAlive && !IsInvincible)
         {
+            if (IsBlocking)
+            {
+                damage = (int) ((damage * (100 - blockDamMod)) / 100);
+                knockback *= (new Vector2(1, 1) - blockKnockMod);
+            }
+            this.knockback = knockback;
+            this.faceRight = faceRight;
             CurrentHP -= damage;
             if(GetComponentInParent<PlayerInput>() != null )
             {
             playerInput.enabled = false;
-
             }
-            Debug.LogError("Knockback :" + knockback);
-            damageableHit.Invoke(damage, knockback);
-
-            Debug.LogError("OUCH");
+            Debug.LogError("From Damageable script Knockback :" + knockback + " of damage: " + damage + " towards: " + faceRight + " at TIME: " + Time.time);
+            damageableHit.Invoke(damage, knockback, faceRight);
             animator.SetTrigger(AnimationStrings.Hurt);
             IsInvincible = true;
         }  

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Folder
   - Damageable
+  - AttackBox
   layers:
   - Default
   - TransparentFX
