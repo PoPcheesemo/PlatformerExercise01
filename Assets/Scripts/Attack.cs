@@ -14,8 +14,7 @@ public class Attack : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        faceRight = GetComponentInParent<IDamageable>().faceRight;  
-        Debug.LogWarning("From Attack Script HIT: " + collision.name + " towards: " + faceRight + " name: " + GetComponentInParent<Transform>().name + " TIME: " + Time.time);
+        faceRight = GetComponentInParent<IDamageable>().faceRight;
         collision.GetComponent<IDamageable>().Hit(damage, knockback, faceRight);
     }
 

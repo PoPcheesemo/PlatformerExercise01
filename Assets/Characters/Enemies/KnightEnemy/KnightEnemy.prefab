@@ -267,6 +267,7 @@ MonoBehaviour:
   runSpeed: 5
   rayLength: 1
   attackRate: 20
+  deathSprite: {fileID: -1028906149, guid: b64888b85c79f8e4a9f441d8e1ea4b4e, type: 3}
   attackZone: {fileID: 3154703906597629220}
   animator: {fileID: 0}
   _isAggro: 0

@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
 
 public class Knight : MonoBehaviour
 {
     public ContactFilter2D castFilterGround;
 
+    private int deathCounter = 0;
     public int countdownTime;
     public float moveSlowRate;
     public float moveFastRate;
@@ -22,7 +24,9 @@ public class Knight : MonoBehaviour
     CircleCollider2D circleCollider;
     IDamageable damageable;
     Rigidbody2D rb;
-   
+    SpriteRenderer spriteRend;
+
+    public Sprite deathSprite;
     public DetectionZone attackZone;
     public Animator animator;
 
@@ -33,7 +37,6 @@ public class Knight : MonoBehaviour
             _isAggro = value;
         }
     }
-
     public enum EnemyDirection {Left, Right}
     private EnemyDirection _walkDirection;
     public EnemyDirection WalkDirection
@@ -180,82 +183,110 @@ public class Knight : MonoBehaviour
         animator = GetComponent<Animator>();
         rb.velocity = new Vector2(moveSpeed * Vector2.right.x, rb.velocity.y);
         damageable = GetComponent<IDamageable>();
+        spriteRend = GetComponent<SpriteRenderer>();
         
     }
     void Update()
     {
-        HasTarget = attackZone.detectedColliders.Count > 0;
-        animator.SetFloat(AnimationStrings.rbVelocity, Mathf.Abs(rb.velocityX));
-        IsGrounded = capsuleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) > 0;
-        IsEdge = circleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) <= 0;
-
-        IsOnWall = circleCollider.Cast(new Vector2(1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0 ||
+        if (!damageable.IsAlive)
+        {
+            if (spriteRend.sprite != deathSprite)
+            {
+                spriteRend.sprite = deathSprite;
+            }
+        }
+        if (damageable.IsAlive) 
+        {
+            HasTarget = attackZone.detectedColliders.Count > 0;
+            animator.SetFloat(AnimationStrings.rbVelocity, Mathf.Abs(rb.velocityX));
+            IsGrounded = capsuleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) > 0;
+            IsEdge = circleCollider.Cast(new Vector2(0f, -1.0f), castFilterGround, groundHits, 0.1f) <= 0;
+            IsOnWall = circleCollider.Cast(new Vector2(1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0 ||
             circleCollider.Cast(new Vector2(-1f, 0.0f), castFilterGround, groundHits, 0.3f) > 0;
+        }
+        if (!damageable.IsAlive)
+        {
+            while (deathCounter == 0)
+            {
+                Debug.LogWarning("KNIGHT DIED");
+                deathCounter++;
+                StartCoroutine(Death());
+            }
+        }
     }
-    private void Death()
+    IEnumerator Death()
     {
+        damageable.IsAlive = false;
+        animator.SetBool(AnimationStrings.IsBlocking, false);
         animator.SetTrigger(AnimationStrings.Death);
-        
+        yield return new WaitForSeconds(0.5f);
+        Debug.LogWarning("KNIGHT DIED 2");
+        spriteRend.sprite = deathSprite;
     }
     private void FixedUpdate()
     {
-        if (IsHurt) 
+        if (damageable.IsAlive)
         {
-            moveSpeed = 0f;
-        }
-        else if (CanMove && !IsAttacking)
-        {
-            StartCoroutine(WalkCooldown());
-        }
-        else
-        {
-            rb.velocity = new Vector2(0f, rb.velocity.y);
-        }
-        if (rb.velocity.y >= 0)
-        {
-            rb.gravityScale = 2.5f;
-            rb.drag = 10f;
-        }
-        else 
-        { 
-            rb.gravityScale = 10f;
-            rb.drag = 2f;
-        }
-        if (HasTarget && !IsAttacking)
-        {
-            StartCoroutine(AttackCooldown(attackRate));
-        }
-        if (IsAggro == true)
-        {
-            if (!IsFacingRight)
+            if (IsHurt || damageable.IsBlocking)
             {
-                moveSpeed = -runSpeed;
+                moveSpeed = 0f;
+            }
+            else if (CanMove && !IsAttacking)
+            {
+                StartCoroutine(WalkCooldown());
             }
             else
             {
-                moveSpeed = runSpeed;
+                rb.velocity = new Vector2(0f, rb.velocity.y);
             }
-        } else
-        {
-            if (!IsFacingRight)
+            if (rb.velocity.y >= 0)
             {
-                moveSpeed = Mathf.Lerp(0f, -walkSpeed, moveFastRate);
+                rb.gravityScale = 2.5f;
+                rb.drag = 10f;
             }
             else
             {
-                moveSpeed = Mathf.Lerp(0f, walkSpeed, moveFastRate);
+                rb.gravityScale = 10f;
+                rb.drag = 2f;
             }
-        }
-        
-        if (IsOnWall || (IsEdge && IsGrounded))
-        {
-            Flip();
-            if (!IsAggro)
+            if (HasTarget && !IsAttacking)
             {
-            StartCoroutine(KnightFlip());
+                StartCoroutine(AttackCooldown(attackRate));
+                StartCoroutine(Blocking());
             }
+            if (IsAggro == true)
+            {
+                if (!IsFacingRight)
+                {
+                    moveSpeed = -runSpeed;
+                }
+                else
+                {
+                    moveSpeed = runSpeed;
+                }
+            }
+            else
+            {
+                if (!IsFacingRight)
+                {
+                    moveSpeed = Mathf.Lerp(0f, -walkSpeed, moveFastRate);
+                }
+                else
+                {
+                    moveSpeed = Mathf.Lerp(0f, walkSpeed, moveFastRate);
+                }
+            }
+
+            if (IsOnWall || (IsEdge && IsGrounded))
+            {
+                Flip();
+                if (!IsAggro)
+                {
+                    StartCoroutine(KnightFlip());
+                }
+            }
+            SetFacingDirection();
         }
-        SetFacingDirection();
     }
     IEnumerator WalkCooldown()
     {
@@ -273,6 +304,7 @@ public class Knight : MonoBehaviour
         animator.SetTrigger(AnimationStrings.Attack);
         yield return new WaitForSeconds(0.1f + attackRate);
         animator.SetBool(AnimationStrings.IsAttacking, false);
+        
     }
     private void Flip()
     {
@@ -292,12 +324,10 @@ public class Knight : MonoBehaviour
     public void OnHit(int damage, Vector2 knockback, float faceRight)
     {
         IsHurt = true;
-        Debug.LogWarning("KNIGHT HIT BY KNOCKBACK: " + knockback + " TIME: " + Time.time);
         StartCoroutine(KnockbackDelay(knockback, faceRight));
     }
     IEnumerator KnockbackDelay(Vector2 knockback, float faceRight)
     {
-        Debug.LogError("From Knight script KNOCKBACK STARTED: " + Time.time + " with the direction of :" + faceRight + " TIME: " + Time.time);
         float tempSpeed = moveSpeed;
         moveSpeed = 0;
         if (faceRight < 0)
@@ -308,9 +338,20 @@ public class Knight : MonoBehaviour
         {
             rb.AddForce(knockback);
         }
-        yield return new WaitForSeconds(0.2f);
-        Debug.LogError("KNOCKBACK ENDED: " + Time.time);
+        yield return new WaitForSeconds(0.02f);
         IsHurt = false;
         moveSpeed = tempSpeed;
+    }
+    public void OnBlock()
+    {
+        StartCoroutine(Blocking());
+    }
+    IEnumerator Blocking()
+    {
+        damageable.IsBlocking = true;
+        animator.SetBool(AnimationStrings.IsBlocking, true);
+        yield return new WaitForSeconds(0.5f);
+        damageable.IsBlocking = false;
+        animator.SetBool(AnimationStrings.IsBlocking, false);
     }
 }

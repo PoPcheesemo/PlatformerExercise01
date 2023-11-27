@@ -8,14 +8,24 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private float walkSpeed;
-    private float runSpeed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
     public float walkSpeedSet;
     public float runSpeedSet;
+    public float baseGrav;
+    public float fallGrav;
     public float JumpMax = 10.0f;
     public float JumpPower;
     public float JumpTime = 0f;
     public float JumpTimeStart;
+    public float jumpApexMin;
+    public float jumpApexMax;
+    public float jumpApexGrav;
+    public float jumpLerpTime;
+    public float jumpLerpTimeMax;
+    public float jumpCoyoteTime;
+    public float jumpCoyoteMax;
+    public float fallTermVel;
     private static int deathCounter = 0;
 
     Rigidbody2D rb;
@@ -26,39 +36,44 @@ public class PlayerController : MonoBehaviour
     IDamageable damageable;
 
     public Sprite deathSprite;
-    public float CurrentMoveSpeed {get
+    public float CurrentMoveSpeed
+    {
+        get
         {
             if (CanMove)
             {
-                 if (IsMoving)
-                 {
-                
+                if (IsMoving)
+                {
+                    runSpeed = runSpeedSet;
+                    walkSpeed = walkSpeedSet;
                     if (!touchingDirections.IsGrounded)
                     {
-                        runSpeed = 0.66f * runSpeedSet;
-                        walkSpeed = 0.66f * walkSpeedSet;
+                        {
+                            runSpeed = 0.84f * runSpeedSet;
+                            walkSpeed = 0.84f * walkSpeedSet;
+                        }
+                    }
+                    
+                    if (IsRunning)
+                    {
+                        return runSpeed;
                     }
                     else
                     {
-                    runSpeed = runSpeedSet;
-                    walkSpeed = walkSpeedSet;
+                        return walkSpeed;
+                    }
                 }
-                if(IsRunning)
-                {
-                    return runSpeed;
-                } else 
-                { 
-                    return walkSpeed; 
-                } 
-            } else
+                else
                 {
                     return 0;
                 }
             }
+
             else { return 0; }
-           
+
         }
     }
+
 
     Vector2 moveInput;
 
@@ -75,10 +90,13 @@ public class PlayerController : MonoBehaviour
     }
     [SerializeField]
     private bool _isMoving = false;
-    public bool IsMoving { get
+    public bool IsMoving
+    {
+        get
         {
             return _isMoving;
-        } private set
+        }
+        private set
         {
             _isMoving = value;
             animator.SetBool(AnimationStrings.IsMoving, value);
@@ -101,7 +119,11 @@ public class PlayerController : MonoBehaviour
 
     public bool _isFacingRight = true;
 
-    public bool IsFacingRight { get { return _isFacingRight; } private set {
+    public bool IsFacingRight
+    {
+        get { return _isFacingRight; }
+        private set
+        {
             if (_isFacingRight != value)
             {
                 transform.localScale *= new Vector2(-1, 1);
@@ -122,10 +144,13 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+    }
 
+    private void FixedUpdate()
+    {
         if (!damageable.IsAlive)
         {
-            while (deathCounter == 0)
+            while (deathCounter < 1)
             {
                 deathCounter++;
                 OnDeath();
@@ -133,25 +158,48 @@ public class PlayerController : MonoBehaviour
                 playerInput.enabled = false;
             }
         }
-    }
-    private void FixedUpdate()
-    {
-        if (!damageable.IsBlocking)
+        if (!touchingDirections.IsGrounded)
         {
-        rb.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.velocity.y);
+            jumpCoyoteTime += Time.fixedDeltaTime;
+            jumpLerpTime += Time.fixedDeltaTime;
+
+            if (rb.velocity.y > jumpApexMax)
+            {
+                rb.gravityScale = baseGrav;
+                rb.drag = 10f;
+            }
+            else if (rb.velocity.y < jumpApexMax && rb.velocity.y >= 0)
+            {
+                rb.gravityScale = Mathf.Lerp(baseGrav, jumpApexGrav, jumpLerpTime / jumpLerpTimeMax);
+            }
+            else if (rb.velocity.y < 0 && rb.velocity.y > jumpApexMin)
+            {
+                rb.gravityScale = Mathf.Lerp(jumpApexGrav, fallGrav, jumpLerpTime / jumpLerpTimeMax);
+            }
+            else if (rb.velocity.y < jumpApexMin)
+            {
+                rb.gravityScale = fallGrav;
+                rb.drag = 2f;
+            }
+            if (rb.velocity.y < fallTermVel)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, fallTermVel);
+            }
 
         }
-        if(rb.velocity.y >= 0)
+        else
         {
-            rb.gravityScale = 2.5f;
-            rb.drag = 10f;
+            jumpCoyoteTime = 0;
+            jumpLerpTime = 0;
         }
-        else 
-        { 
-            rb.gravityScale = 10f;
-            rb.drag = 2f;
+
+        if (!damageable.IsBlocking)
+        {
+            rb.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.velocity.y);
+
         }
         animator.SetFloat(AnimationStrings.yVelocity, rb.velocity.y);
+
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -174,7 +222,8 @@ public class PlayerController : MonoBehaviour
         if (moveInput.x > 0 && !IsFacingRight)
         {
             IsFacingRight = true;
-        } else if (moveInput.x < 0 && IsFacingRight)
+        }
+        else if (moveInput.x < 0 && IsFacingRight)
         {
             IsFacingRight = false;
         }
@@ -184,7 +233,7 @@ public class PlayerController : MonoBehaviour
         if (context.started)
         {
             IsRunning = true;
-        } 
+        }
         if (context.canceled)
         {
             IsRunning = false;
@@ -192,19 +241,19 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started && touchingDirections.IsGrounded && CanMove)
+        if (context.started && jumpCoyoteTime < jumpCoyoteMax && CanMove)
         {
             JumpTimeStart = Time.time;
         }
 
-        if (context.canceled && touchingDirections.IsGrounded)
+        if (context.canceled && jumpCoyoteTime < jumpCoyoteMax)
         {
             animator.SetTrigger(AnimationStrings.Jump);
             JumpTime = Time.time - JumpTimeStart;
             if (JumpTime > 0.167f) JumpTime = 0.167f;
 
             JumpPower = JumpMax * JumpTime * 6;
-            rb.velocity = new Vector2(rb.velocityX, JumpPower);
+            rb.AddForce(new Vector2(rb.velocity.x * JumpPower / 10, JumpPower));
         }
     }
     public void OnDeath()
@@ -217,15 +266,12 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.sprite = deathSprite;
         yield return new WaitUntil(() => !animator.GetCurrentAnimatorStateInfo(0).IsTag(AnimationStrings.Death));
-     //   animator.enabled = false;
         spriteRenderer.sprite = deathSprite;
         Debug.Log("DEATH!");
     }
     public void OnHit(int damage, Vector2 knockback, float faceRight)
     {
         rb.AddForce(knockback);
-    //    rb.velocity = new Vector2(knockback.x, knockback.y); // +rb.velocity.y
-
     }
     public void OnBlock(InputAction.CallbackContext context)
     {

@@ -100,36 +100,36 @@ public class IDamageable : MonoBehaviour
         {
             if (hurtTime > iTime)
             {
-                //Remove invincibility
                 IsInvincible = false;
                 if (GetComponentInParent<PlayerInput>() != null)
                 {
                     playerInput.enabled = true;
-
                 }
                 hurtTime = 0;
             }
-
             hurtTime += Time.deltaTime;
         }
         
         if (!IsAlive)
         {
+            
+            if (GetComponentInParent<PlayerController>() == true )
+            {
+                GetComponentInParent<PlayerController>().playerInput.enabled = false;
+            }
+            if(GetComponentInParent<Knight>() == true )
+            {
+                GetComponentInParent<Knight>().moveSpeed = 0;
+                GetComponentInParent<Knight>().walkSpeed = 0;
+                GetComponentInParent<Knight>().runSpeed = 0;
+            }
             while (deathCounter == 0)
             {
                 deathCounter++;
                 GetComponentInParent<Transform>().gameObject.layer = 13;
-                animator.SetTrigger(AnimationStrings.Death);
+                StartCoroutine(DeathDelay());
                 
             }
-            if (GetComponentInParent<PlayerController>() == true )
-            {
-                    GetComponentInParent<PlayerController>().playerInput.enabled = false;
-            }
-            if(GetComponentInParent<Knight>() == true )
-                {
-                    GetComponentInParent<Knight>().enabled = false;
-                }
         }
     }
     public void Hit(int damage, Vector2 knockback, float faceRight)
@@ -145,14 +145,22 @@ public class IDamageable : MonoBehaviour
             this.knockback = knockback;
             this.faceRight = faceRight;
             CurrentHP -= damage;
+            if (CurrentHP < 0)
+            {
+                IsAlive = false; return;
+            }
             if(GetComponentInParent<PlayerInput>() != null )
             {
             playerInput.enabled = false;
             }
-            Debug.LogError("From Damageable script Knockback :" + knockback + " of damage: " + damage + " towards: " + faceRight + " at TIME: " + Time.time);
             damageableHit.Invoke(damage, knockback, faceRight);
             animator.SetTrigger(AnimationStrings.Hurt);
             IsInvincible = true;
         }  
+    }
+    IEnumerator DeathDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        animator.SetTrigger(AnimationStrings.Death);
     }
 }
