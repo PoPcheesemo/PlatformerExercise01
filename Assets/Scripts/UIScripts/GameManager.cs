@@ -13,11 +13,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PlayerInput playerInput;
 
-
-    private void Awake()
-    {
-        playerInput = GetComponent<PlayerInput>();
-    }
     public void StartGame()
     {
         SceneManager.LoadScene(gameStartScene);
@@ -43,7 +38,7 @@ public class GameManager : MonoBehaviour
             {
                 isPaused = true;
                 Time.timeScale = 0f;
-                //  playerInput.enabled = false;
+                playerInput.DeactivateInput();
                 pauseMenu.SetActive(true);
             }
         }
@@ -52,7 +47,7 @@ public class GameManager : MonoBehaviour
     {
         isPaused = false;
         Time.timeScale = 1.0f;
-        playerInput.enabled = true;
+        playerInput.ActivateInput();
         pauseMenu.SetActive(false);
     }
 }

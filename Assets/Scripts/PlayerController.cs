@@ -271,7 +271,14 @@ public class PlayerController : MonoBehaviour
     }
     public void OnHit(int damage, Vector2 knockback, float faceRight)
     {
-        rb.AddForce(knockback);
+        if (faceRight < 0)
+        {
+            rb.AddForce(new Vector2(-knockback.x, knockback.y));
+        }
+        else if (faceRight > 0)
+        {
+            rb.AddForce(knockback);
+        }
     }
     public void OnBlock(InputAction.CallbackContext context)
     {

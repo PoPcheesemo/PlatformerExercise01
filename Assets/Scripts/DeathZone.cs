@@ -16,6 +16,6 @@ public class DeathZone : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        collision.GetComponent<IDamageable>().Hit(20, knockback, faceRight);
+        collision.GetComponent<IDamageable>().Hit(200, knockback, faceRight);
     }
 }

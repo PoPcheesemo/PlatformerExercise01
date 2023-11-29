@@ -252,7 +252,7 @@ public class Knight : MonoBehaviour
             if (HasTarget && !IsAttacking)
             {
                 StartCoroutine(AttackCooldown(attackRate));
-                StartCoroutine(Blocking());
+            //    StartCoroutine(Blocking());
             }
             if (IsAggro == true)
             {

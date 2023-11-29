@@ -160,7 +160,7 @@ public class IDamageable : MonoBehaviour
     }
     IEnumerator DeathDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         animator.SetTrigger(AnimationStrings.Death);
     }
 }
