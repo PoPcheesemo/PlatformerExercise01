@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public int gameStartScene;
     public int menuScene;
-    static public bool isPaused;
+    [SerializeField] static public bool isPaused = false;
+    public GameObject pauseMenu;
 
     [SerializeField] private PlayerInput playerInput;
 
@@ -35,13 +36,15 @@ public class GameManager : MonoBehaviour
         {
             if (isPaused)
             {
+                Debug.Log("UNPAUSE");
                 UnPause();
             }
             else
             {
                 isPaused = true;
                 Time.timeScale = 0f;
-                playerInput.enabled = false;
+                //  playerInput.enabled = false;
+                pauseMenu.SetActive(true);
             }
         }
     }
@@ -50,5 +53,6 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1.0f;
         playerInput.enabled = true;
+        pauseMenu.SetActive(false);
     }
 }

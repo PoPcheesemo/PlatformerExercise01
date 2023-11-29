@@ -12,7 +12,7 @@ public class DeathZone : MonoBehaviour
     {
         player = GetComponent<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-      //  spriteRenderer.enabled = false;
+        spriteRenderer.enabled = false;
     }
     private void OnTriggerStay2D(Collider2D collision)
     {

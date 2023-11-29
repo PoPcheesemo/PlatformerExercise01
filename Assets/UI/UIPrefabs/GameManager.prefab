@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8792078091843640938}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 680.98175, y: 411.53543, z: -3.6038427}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameStartScene: 1
   menuScene: 0
+  pauseMenu: {fileID: 0}
   playerInput: {fileID: 0}
 --- !u!114 &2974767052583221466
 MonoBehaviour:
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 783753799535588489e5a4013d0a6772, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 7729f84e4d3b2aa4d9a74cf8bd74b79d, type: 3}
   m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -75,72 +76,72 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 8b51010e-1872-4e88-b7ab-fc6e3f3c226d
+    m_ActionId: 470fbb16-ebba-4b96-890d-8598a337c9da
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 2b091175-59f3-4528-b8e1-c5f5632e53c6
+    m_ActionId: a0aa66a9-aad5-4293-bcf9-167bc87f43cf
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: a67bb3fd-3b1b-4b18-9b9d-b6b651c12404
-    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
+    m_ActionId: bb193db0-9ccc-4c42-b36b-1c31768c23d2
+    m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/rightCtrl]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 69a84aff-fd3c-483e-b3f7-fee08806ec7c
+    m_ActionId: 5beada42-22bf-4182-a6ae-8ef801bd5229
+    m_ActionName: 'Player/Run[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0f9d03e9-b539-4616-a518-60fbc8d221c9
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0b006259-cda9-4c02-a32b-b029ae406f14
+    m_ActionName: 'Player/Block[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8dd4f7bb-d6d8-4e20-b950-cfbd1c6f87dd
+    m_ActionName: 'Player/Pause[/Keyboard/escape,/Keyboard/p]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cec496d1-c94f-4b5c-8fb9-203b2b54c9c0
     m_ActionName: 'UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 5d0865c4-ab61-43a1-9c9c-9b775d174f1b
+    m_ActionId: 5a3000fe-6536-4c41-813b-0fed72f741fc
     m_ActionName: 'UI/Submit[/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: eb8bd6a7-c41f-41ad-b71c-9c40fce9bf60
+    m_ActionId: dbb438f1-8a06-40f5-8193-e24d018aa503
     m_ActionName: 'UI/Cancel[/Keyboard/escape]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 7f200f30-14ac-4f29-85a9-780ccfcd9d9e
+    m_ActionId: 51be47c1-a35a-4866-85ac-d6c54ea3a668
     m_ActionName: 'UI/Point[/Mouse/position,/Pen/position]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 9af61488-ac46-4466-8b60-c95c566111e8
+    m_ActionId: a1048674-c1d8-4ac4-a9bd-09e7d4063a2d
     m_ActionName: 'UI/Click[/Mouse/leftButton,/Pen/tip]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 52b616f7-030e-474a-8770-3fe33b39c33c
+    m_ActionId: ebe6aa32-6f82-40e6-92ab-0aa1ae0feedc
     m_ActionName: 'UI/ScrollWheel[/Mouse/scroll]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: ed6a3c5f-5a63-414a-9815-f4f45e1eb77d
+    m_ActionId: 9a539794-4ae5-486a-8222-adf7bb74d1f0
     m_ActionName: 'UI/MiddleClick[/Mouse/middleButton]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: c85e4032-e4e6-4f96-ae7b-e05d544e392d
+    m_ActionId: 012e1245-c21d-40a5-86dd-ec3526fe51c3
     m_ActionName: 'UI/RightClick[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: db051065-1df4-417e-977f-19643c4e5fff
+    m_ActionId: 38090231-bf00-4ab4-a319-0420964df065
     m_ActionName: UI/TrackedDevicePosition
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 382e09ec-fb04-4e8e-b26a-848bd084f283
+    m_ActionId: 7d8ea133-6434-4bc9-b07c-0e0023487763
     m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4621892783819694687}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Pause
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: d4971fff-6ae7-49cb-b6b8-1c07def1c7ce
-    m_ActionName: 'UI/Pause[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
