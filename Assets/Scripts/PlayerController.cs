@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(IDamageable))]
 
@@ -268,6 +269,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitUntil(() => !animator.GetCurrentAnimatorStateInfo(0).IsTag(AnimationStrings.Death));
         spriteRenderer.sprite = deathSprite;
         Debug.Log("DEATH!");
+        SceneManager.LoadScene(1);
     }
     public void OnHit(int damage, Vector2 knockback, float faceRight)
     {
