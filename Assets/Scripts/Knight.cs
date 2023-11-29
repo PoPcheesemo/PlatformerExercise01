@@ -1,7 +1,7 @@
 using NUnit.Framework.Internal;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
@@ -218,7 +218,7 @@ public class Knight : MonoBehaviour
     {
         damageable.IsAlive = false;
         animator.SetBool(AnimationStrings.IsBlocking, false);
-        animator.SetTrigger(AnimationStrings.Death);
+      //  animator.SetTrigger(AnimationStrings.Death);
         yield return new WaitForSeconds(0.5f);
         Debug.LogWarning("KNIGHT DIED 2");
         spriteRend.sprite = deathSprite;
