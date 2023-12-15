@@ -513,10 +513,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 984bdccf627789843bb7c7ac624c7396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameOver: 0
   gameStartScene: 1
   menuScene: 0
+  enemyAmount: 0
+  health: 0
+  timer: 0
   pauseMenu: {fileID: 0}
+  gameOverMenu: {fileID: 0}
+  winLoseText: {fileID: 0}
+  timerText: {fileID: 0}
   playerInput: {fileID: 0}
+  playerObject: {fileID: 0}
 --- !u!4 &979301740
 Transform:
   m_ObjectHideFlags: 0

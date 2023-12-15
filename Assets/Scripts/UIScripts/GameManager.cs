@@ -29,12 +29,10 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        timer += Time.deltaTime;
-        timerText.text = "" + timer;
-    }
-
-    private void FixedUpdate()
-    {
+        if (gameOver == false)
+        {
+            timer += Time.deltaTime;
+        }
         if (enemyAmount == 0 && gameOver == false)
         {
             gameOver = true;
@@ -49,6 +47,7 @@ public class GameManager : MonoBehaviour
                 LoseGame();
             }
         }
+        timerText.text = "" + timer;
     }
     public void StartGame()
     {
@@ -101,20 +100,13 @@ public class GameManager : MonoBehaviour
     }
     public void WinGame()
     {
+        timerText.text = "" + timer;
         StartCoroutine(GameEndWin());
     }
     public void LoseGame()
     {
+        timerText.text = "" + timer;
         StartCoroutine(GameEndLose());
-        if (gameOverMenu != null)
-        {
-        isPaused = true;
-        Time.timeScale = 0f;
-        playerInput.DeactivateInput();
-        gameOverMenu.SetActive(true);
-        winLoseText.text = "YOU ARE DEAD";
-
-        }
     }
     IEnumerator GameEndWin()
     {
