@@ -25,11 +25,13 @@ public class Knight : MonoBehaviour
     IDamageable damageable;
     Rigidbody2D rb;
     SpriteRenderer spriteRend;
+    
 
     public Sprite deathSprite;
     public DetectionZone attackZone;
     public Animator animator;
 
+    [SerializeField] GameManager gameManager;
     [SerializeField] private bool _isAggro;
     public bool IsAggro { get { return _isAggro; }
         set
@@ -222,6 +224,7 @@ public class Knight : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Debug.LogWarning("KNIGHT DIED 2");
         spriteRend.sprite = deathSprite;
+        gameManager.enemyAmount--;
     }
     private void FixedUpdate()
     {

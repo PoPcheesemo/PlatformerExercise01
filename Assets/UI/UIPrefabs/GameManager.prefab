@@ -48,8 +48,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameStartScene: 1
   menuScene: 0
+  enemyAmount: 6
+  health: 0
   pauseMenu: {fileID: 0}
   playerInput: {fileID: 0}
+  playerObject: {fileID: 0}
 --- !u!114 &2974767052583221466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,4 +164,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberText: {fileID: 0}
+  healthText: {fileID: 0}
+  maxHealthText: {fileID: 0}
+  playerObject: {fileID: 0}
+  health: 0
+  maxHealth: 0
   slider: {fileID: 0}

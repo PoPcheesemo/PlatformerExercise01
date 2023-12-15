@@ -22,9 +22,12 @@ public class TextSlider : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (playerObject != null)
+        {
         health = playerObject.GetComponent<IDamageable>().CurrentHP;
         maxHealth = playerObject.GetComponent<IDamageable>().MaxHP;
         SetHealth(health, maxHealth);
+        }
     }
     public void SetNumberText(float value)
     {

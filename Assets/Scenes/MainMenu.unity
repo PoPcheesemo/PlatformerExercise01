@@ -979,6 +979,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberText: {fileID: 1604272250}
+  healthText: {fileID: 0}
+  maxHealthText: {fileID: 0}
+  playerObject: {fileID: 0}
+  health: 0
+  maxHealth: 0
   slider: {fileID: 4246135480230117051}
 --- !u!1001 &360184394406184473
 PrefabInstance:

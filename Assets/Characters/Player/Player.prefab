@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 50
-  knockback: {x: 4000, y: 400}
+  knockback: {x: 2000, y: 400}
   faceRight: 0
 --- !u!60 &2370751848703724039
 PolygonCollider2D:
@@ -277,7 +277,7 @@ MonoBehaviour:
   runSpeedSet: 16
   baseGrav: 1.5
   fallGrav: 10
-  JumpMax: 2500
+  JumpMax: 1500
   JumpPower: 0
   JumpTime: 0
   JumpTimeStart: 0
@@ -446,18 +446,6 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Pause
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -468,6 +456,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Pause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 8dd4f7bb-d6d8-4e20-b950-cfbd1c6f87dd
     m_ActionName: 'Player/Pause[/Keyboard/escape]'
